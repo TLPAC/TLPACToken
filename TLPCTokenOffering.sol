@@ -107,7 +107,7 @@ contract TLPCTokenOffering is Pausable {
      * these limits are doubled between capDoublingTimestamp ~ capReleaseTimestamp
      * and are lifted completely between capReleaseTimestamp ~ end time
      *
-     * @param TlpcToEtherRate Number of Tlpctokens per ether
+     * @param TLPCToEtherRate Number of Tlpctokens per ether
      * @param beneficiaryAddr Address where funds are collected
      * @param baseContributionCapInWei Base contribution limit in Wei per address
      */
@@ -122,7 +122,7 @@ contract TLPCTokenOffering is Pausable {
         require(tokenAddress != address(0));
         require(baseContributionCapInWei >= MINIMUM_CONTRIBUTION);
 
-        token = TlPCToken(tokenAddress);
+        token = TLPCToken(tokenAddress);
         rate = TLPCToEtherRate;
         beneficiary = beneficiaryAddr;
         stage = Stages.Setup;
