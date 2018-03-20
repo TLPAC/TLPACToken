@@ -1,20 +1,21 @@
 pragma solidity ^0.4.18;
-import "zeppelin-solidity/contracts/ownership/Ownable.sol";
-import "zeppelin-solidity/contracts/token/StandardToken.sol";
-import "zeppelin-solidity/contracts/token/BurnableToken.sol";
-import "zeppelin-solidity/contracts/math/SafeMath.sol";
+
+import 'browser/Ownable.sol';
+import 'browser/StandardToken.sol';
+import 'browser/BurnableToken.sol';
+import 'browser/SafeMath.sol';
 
 /*
- * TLPACToken is a standard ERC20 token with some additional functionalities:
+ * TLPCToken is a standard ERC20 token with some additional functionalities:
  * - Transfers are only enabled after contract owner enables it (after the ICO)
  * - Contract sets 30% of the total supply as allowance for ICO contract
  *
  * Note: Token Offering == Initial Coin Offering(ICO)
  */
 
-contract TLPACToken is StandardToken, BurnableToken, Ownable {
-    string public constant symbol = "TLPAC";
-    string public constant name = "TLPAC Token";
+contract TLPCToken is StandardToken, BurnableToken, Ownable {
+    string public constant symbol = "TPC";
+    string public constant name = "TLPC Token";
     uint8 public constant decimals = 18;
     uint256 public constant INITIAL_SUPPLY = 500000000 * (10 ** uint256(decimals));
     uint256 public constant TOKEN_OFFERING_ALLOWANCE = 150000000 * (10 ** uint256(decimals));
@@ -71,12 +72,12 @@ contract TLPACToken is StandardToken, BurnableToken, Ownable {
      *
      * @param admin Address of admin account
      */
-    function TLPACToken(address admin) public {
-        totalSupply = INITIAL_SUPPLY;
+    function TLPCToken(address admin) public {
+        totalSupply_ = INITIAL_SUPPLY;
 
         // Mint tokens
-        balances[msg.sender] = totalSupply;
-        Transfer(address(0x0), msg.sender, totalSupply);
+        balances[msg.sender] = totalSupply_;
+        Transfer(address(0x0), msg.sender, totalSupply_);
 
         // Approve allowance for admin account
         adminAddr = admin;
@@ -86,7 +87,7 @@ contract TLPACToken is StandardToken, BurnableToken, Ownable {
     /**
      * Set token offering to approve allowance for offering contract to distribute tokens
      *
-     * @param offeringAddr Address of token offerng contract
+     * @param offeringAddr Address of token offering contract
      * @param amountForSale Amount of tokens for sale, set 0 to max out
      */
     function setTokenOffering(address offeringAddr, uint256 amountForSale) external onlyOwner onlyTokenOfferingAddrNotSet {
@@ -113,7 +114,7 @@ contract TLPACToken is StandardToken, BurnableToken, Ownable {
      * Transfer from sender to another account
      *
      * @param to Destination address
-     * @param value Amount of TLPACtokens to send
+     * @param value Amount of TLPCtokens to send
      */
     function transfer(address to, uint256 value) public onlyWhenTransferAllowed validDestination(to) returns (bool) {
         return super.transfer(to, value);
@@ -124,7 +125,7 @@ contract TLPACToken is StandardToken, BurnableToken, Ownable {
      *
      * @param from Origin address
      * @param to Destination address
-     * @param value Amount of TLPACtokens to send
+     * @param value Amount of TLPCtokens to send
      */
     function transferFrom(address from, address to, uint256 value) public onlyWhenTransferAllowed validDestination(to) returns (bool) {
         return super.transferFrom(from, to, value);
