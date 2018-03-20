@@ -43,7 +43,7 @@ contract TLPCTokenOffering is Pausable {
     // The current stage of the offering
     Stages public stage;
 
-    enum Stages {
+    enum Stages { 
         Setup,
         OfferingStarted,
         OfferingEnded
@@ -90,7 +90,7 @@ contract TLPCTokenOffering is Pausable {
         require(weiRaised.add(contributionInWei) <= FUNDING_ETH_HARD_CAP);
 
         uint256 initialCapInWei = tierCaps[tier];
-
+        
         if (now < capDoublingTimestamp) {
             require(contributions[participant].add(contributionInWei) <= initialCapInWei);
         } else if (now < capReleaseTimestamp) {
@@ -106,14 +106,14 @@ contract TLPCTokenOffering is Pausable {
      * per tier within the first tranche of the sale (sale start ~ capDoublingTimestamp)
      * these limits are doubled between capDoublingTimestamp ~ capReleaseTimestamp
      * and are lifted completely between capReleaseTimestamp ~ end time
-     *
+     *  
      * @param TLPCToEtherRate Number of Tlpctokens per ether
      * @param beneficiaryAddr Address where funds are collected
      * @param baseContributionCapInWei Base contribution limit in Wei per address
      */
     function TLPCTokenOffering(
-        uint256 TLPCToEtherRate,
-        address beneficiaryAddr,
+        uint256 TLPCToEtherRate, 
+        address beneficiaryAddr, 
         uint256 baseContributionCapInWei,
         address tokenAddress
     ) public {
@@ -153,7 +153,7 @@ contract TLPCTokenOffering is Pausable {
 
     /**
      * Whitelist participant address per tier
-     *
+     * 
      * @param tiers Array of indices of tier, each value should be less than tierCaps.length
      * @param users Array of addresses to be whitelisted
      */
@@ -185,7 +185,7 @@ contract TLPCTokenOffering is Pausable {
     function endOffering() public onlyOwner atStage(Stages.OfferingStarted) {
         endOfferingImpl();
     }
-
+    
     /**
      * Function to invest ether to buy tokens, can be called directly or called by the fallback function
      * Only whitelisted users can buy tokens.
@@ -204,7 +204,7 @@ contract TLPCTokenOffering is Pausable {
 
     /**
      * Function that returns whether offering has ended
-     *
+     * 
      * @return bool Return true if token offering has ended
      */
     function hasEnded() public view returns (bool) {
@@ -213,7 +213,7 @@ contract TLPCTokenOffering is Pausable {
 
     /**
      * Internal function that buys token per tier
-     *
+     * 
      * Investiment limit changes over time:
      * 1) [offering starts ~ capDoublingTimestamp]:     1x of contribution limit per tier (1 * tierCaps[tier])
      * 2) [capDoublingTimestamp ~ capReleaseTimestamp]: limit per participant is raised to 2x of contribution limit per tier (2 * tierCaps[tier])
@@ -227,7 +227,7 @@ contract TLPCTokenOffering is Pausable {
 
         // Calculate token amount to be distributed
         uint256 tokens = contributionInWei.mul(rate);
-
+        
         if (!token.transferFrom(token.owner(), participant, tokens)) {
             revert();
         }
@@ -238,10 +238,10 @@ contract TLPCTokenOffering is Pausable {
         if (weiRaised >= FUNDING_ETH_HARD_CAP) {
             endOfferingImpl();
         }
-
+        
         // Transfer funds to beneficiary
         beneficiary.transfer(contributionInWei);
-        TokenPurchase(msg.sender, contributionInWei, tokens);
+        TokenPurchase(msg.sender, contributionInWei, tokens);       
     }
 
     /**
@@ -257,7 +257,7 @@ contract TLPCTokenOffering is Pausable {
      * Allocate tokens for presale participants before public offering, can only be executed at Stages.Setup stage.
      *
      * @param to Participant address to send Tlpctokens to
-     * @param tokens Amount of Tlpctokens to be sent to parcitipant
+     * @param tokens Amount of Tlpctokens to be sent to parcitipant 
      */
     function allocateTokensBeforeOffering(address to, uint256 tokens)
         public
@@ -270,7 +270,7 @@ contract TLPCTokenOffering is Pausable {
         }
         return true;
     }
-
+    
     /**
      * Bulk version of allocateTokensBeforeOffering
      */
